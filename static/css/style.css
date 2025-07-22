@@ -1,0 +1,213 @@
+/* Custom Colors */
+:root {
+    --primary-color: #4a6da7;
+    --secondary-color: #e83e8c;
+    --accent-color: #ffbe0b;
+    --success-color: #28a745;
+    --info-color: #17a2b8;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+}
+
+/* Body Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f9fa;
+}
+
+main {
+    flex: 1;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .card {
+        margin-bottom: 15px;
+    }
+    
+    .btn {
+        padding: 0.375rem 0.5rem;
+    }
+    
+    h1, .h1 {
+        font-size: 1.75rem;
+    }
+    
+    h2, .h2 {
+        font-size: 1.5rem;
+    }
+    
+    h3, .h3 {
+        font-size: 1.25rem;
+    }
+}
+
+/* Card Styles */
+.card {
+    border-radius: 10px;
+    border: none;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.card-header {
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+}
+
+.card-footer {
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+}
+
+/* Button Styles */
+.btn {
+    border-radius: 5px;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #3b5998;
+    border-color: #3b5998;
+}
+
+/* Form Styles */
+.form-control, .form-select {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    padding: 0.5rem 0.75rem;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(74, 109, 167, 0.25);
+}
+
+/* Religious Badges */
+.religious-badge {
+    display: inline-block;
+    padding: 0.25em 0.4em;
+    font-size: 0.75em;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    background-color: #e9ecef;
+    color: #212529;
+}
+
+.religious-badge.secular {
+    background-color: #f8f9fa;
+}
+
+.religious-badge.traditional {
+    background-color: #cfe2ff;
+}
+
+.religious-badge.modern_orthodox {
+    background-color: #9ec5fe;
+}
+
+.religious-badge.yeshivish {
+    background-color: #6ea8fe;
+}
+
+.religious-badge.hassidic {
+    background-color: #3d8bfd;
+    color: white;
+}
+
+/* Match Score */
+.match-score {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.match-score.high {
+    background-color: #28a745;
+}
+
+.match-score.medium {
+    background-color: #ffc107;
+}
+
+.match-score.low {
+    background-color: #dc3545;
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+    .table-responsive {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .compatibility-table th, .compatibility-table td {
+        white-space: nowrap;
+    }
+}
+
+/* Bottom navigation for mobile */
+@media (max-width: 768px) {
+    .mobile-bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background-color: white;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0;
+    }
+    
+    .mobile-bottom-nav a {
+        color: #6c757d;
+        text-decoration: none;
+        text-align: center;
+        font-size: 0.7rem;
+    }
+    
+    .mobile-bottom-nav a i {
+        font-size: 1.2rem;
+        display: block;
+        margin-bottom: 2px;
+    }
+    
+    .mobile-bottom-nav a.active {
+        color: var(--primary-color);
+    }
+    
+    main {
+        padding-bottom: 70px;
+    }
+} 

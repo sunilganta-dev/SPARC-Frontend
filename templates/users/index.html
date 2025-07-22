@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}My Applicants - SPARC Matchmaking{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">My Applicants</h1>
+    <a href="{{ url_for('users.create') }}" class="btn btn-primary">
+        <i class="fas fa-plus me-1"></i> Add New Applicant
+    </a>
+</div>
+
+<!-- Mobile-friendly search and filter -->
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+        <form id="searchForm" class="row g-3">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search by name...">
+                </div>
+            </div>
+            <div class="col-md-6 d-flex">
+                <select id="filterGender" class="form-select me-2">
+                    <option value="">All Genders</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+                <select id="filterReligious" class="form-select">
+                    <option value="">All Religious Levels</option>
+                    <option value="secular">Secular/Hiloni</option>
+                    <option value="traditional">Traditional/Masorti</option>
+                    <option value="modern_orthodox">Modern Orthodox/Dati</option>
+                    <option value="yeshivish">Yeshivish</option>
+                    <option value="hassidic">Hassidic/Hasidi</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if users %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+        {% for user in users %}
+            <div class="col user-card" 
+                 data-name="{{ user.name }}" 
+                 data-gender="{{ user.gender }}"
+                 data-religious="{{ user.religious_level|default('') }}">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title mb-0">{{ user.name }}</h5>
+                            <span class="badge {% if user.gender == 'Male' %}bg-primary{% else %}bg-danger{% endif %}">
+                                {{ user.gender }}
+                            </span>
+                        </div>
+                        
+                        <p class="card-text mb-1">
+                            <small class="text-muted"><i class="fas fa-calendar-alt me-1"></i> Age:</small> {{ user.age }}
+                        </p>
+                        
+                        {% if user.height %}
+                        <p class="card-text mb-1">
+                            <small class="text-muted"><i class="fas fa-ruler-vertical me-1"></i> Height:</small> {{ user.height }} cm
+                        </p>
+                        {% endif %}
+                        
+                        <p class="card-text mb-1">
+                            <small class="text-muted"><i class="fas fa-map-marker-alt me-1"></i> Location:</small> 
+                            {{ user.current_location|default(user.city|default('') + ', ' + user.country|default('')) }}
+                        </p>
+                        
+                        {% if user.religious_level %}
+                        <p class="card-text mb-3">
+                            <small class="text-muted"><i class="fas fa-pray me-1"></i> Religious Level:</small>
+                            <span class="religious-badge {{ user.religious_level }}">
+                                {% if user.religious_level == 'secular' %}
+                                    Secular/Hiloni
+                                {% elif user.religious_level == 'traditional' %}
+                                    Traditional/Masorti
+                                {% elif user.religious_level == 'modern_orthodox' %}
+                                    Modern Orthodox/Dati
+                                {% elif user.religious_level == 'yeshivish' %}
+                                    Yeshivish
+                                {% elif user.religious_level == 'hassidic' %}
+                                    Hassidic/Hasidi
+                                {% else %}
+                                    {{ user.religious_level|capitalize }}
+                                {% endif %}
+                            </span>
+                        </p>
+                        {% endif %}
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('users.view', user_id=user.id) }}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye me-1"></i> View
+                            </a>
+                            <a href="{{ url_for('matches.user_matches', user_id=user.id) }}" class="btn btn-sm btn-outline-success">
+                                <i class="fas fa-handshake me-1"></i> Matches
+                            </a>
+                            <a href="{{ url_for('users.edit', user_id=user.id) }}" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-edit me-1"></i> Edit
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info text-center p-5">
+        <i class="fas fa-info-circle fa-3x mb-3"></i>
+        <h4>No Applicants Yet</h4>
+        <p class="mb-0">You haven't added any applicants to your system yet. Click the button above to add your first applicant.</p>
+    </div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const filterGender = document.getElementById('filterGender');
+        const filterReligious = document.getElementById('filterReligious');
+        const userCards = document.querySelectorAll('.user-card');
+        
+        function filterCards() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const genderFilter = filterGender.value;
+            const religiousFilter = filterReligious.value;
+            
+            userCards.forEach(card => {
+                const name = card.getAttribute('data-name').toLowerCase();
+                const gender = card.getAttribute('data-gender');
+                const religious = card.getAttribute('data-religious');
+                
+                const nameMatch = name.includes(searchTerm);
+                const genderMatch = !genderFilter || gender === genderFilter;
+                const religiousMatch = !religiousFilter || religious === religiousFilter;
+                
+                if (nameMatch && genderMatch && religiousMatch) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        searchInput.addEventListener('input', filterCards);
+        filterGender.addEventListener('change', filterCards);
+        filterReligious.addEventListener('change', filterCards);
+    });
+</script>
+{% endblock %} 

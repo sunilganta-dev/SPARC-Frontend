@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block title %}Compatibility Details - SPARC Matchmaking{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <a href="{{ url_for('matches.index') }}" class="btn btn-outline-secondary mb-3">
+        <i class="fas fa-arrow-left me-1"></i> Back to Matches
+    </a>
+    
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h1 class="h4 mb-0">Compatibility Analysis</h1>
+        </div>
+        <div class="card-body">
+            <div class="text-center mb-4">
+                <div class="d-inline-block match-score {{ 'high' if compatibility.overall_score|default(compatibility.score|default(0)) >= 75 else 'medium' if compatibility.overall_score|default(compatibility.score|default(0)) >= 50 else 'low' }}" style="width: 100px; height: 100px; font-size: 2rem;">
+                    {{ compatibility.overall_score|default(compatibility.score|default(0)) }}%
+                </div>
+                <h4 class="mt-2">Overall Compatibility</h4>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">{{ user_a.name|default(user_a.first_name ~ ' ' ~ user_a.last_name) }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="badge {{ 'bg-primary' if user_a.gender == 'Male' else 'bg-danger' }}">
+                                    {{ user_a.gender }}
+                                </span>
+                                <span>Age: {{ user_a.age }}</span>
+                            </div>
+                            
+                            {% if user_a.height %}
+                            <p class="mb-1">
+                                <strong>Height:</strong> {{ user_a.height }} cm
+                            </p>
+                            {% endif %}
+                            
+                            <p class="mb-1">
+                                <strong>Location:</strong> {{ user_a.current_location|default(user_a.city ~ ', ' ~ user_a.country) }}
+                            </p>
+                            
+                            {% if user_a.religious_level %}
+                            <p class="mb-1">
+                                <strong>Religious Level:</strong>
+                                <span class="religious-badge {{ user_a.religious_level }}">
+                                    {% if user_a.religious_level == 'secular' %}
+                                        Secular/Hiloni
+                                    {% elif user_a.religious_level == 'traditional' %}
+                                        Traditional/Masorti
+                                    {% elif user_a.religious_level == 'modern_orthodox' %}
+                                        Modern Orthodox/Dati
+                                    {% elif user_a.religious_level == 'yeshivish' %}
+                                        Yeshivish
+                                    {% elif user_a.religious_level == 'hassidic' %}
+                                        Hassidic/Hasidi
+                                    {% else %}
+                                        {{ user_a.religious_level|capitalize }}
+                                    {% endif %}
+                                </span>
+                            </p>
+                            {% endif %}
+                            
+                            {% if user_a.kosher_level %}
+                            <p class="mb-1">
+                                <strong>Kosher Level:</strong> {{ user_a.kosher_level|replace('_', ' ')|capitalize }}
+                            </p>
+                            {% endif %}
+                            
+                            {% if user_a.shabbat_observance %}
+                            <p class="mb-1">
+                                <strong>Shabbat Observance:</strong> {{ user_a.shabbat_observance|replace('_', ' ')|capitalize }}
+                            </p>
+                            {% endif %}
+                            
+                            {% if user_a.education %}
+                            <p class="mb-1">
+                                <strong>Education:</strong> {{ user_a.education|replace('_', ' ')|capitalize }}
+                            </p>
+                            {% endif %}
+                            
+                            {% if user_a.occupation %}
+                            <p class="mb-1">
+                                <strong>Occupation:</strong> {{ user_a.occupation }}
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">{{ user_b.name|default(user_b.first_name ~ ' ' ~ user_b.last_name) }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="badge {{ 'bg-primary' if user_b.gender == 'Male' else 'bg-danger' }}">
+                                    {{ user_b.gender }}
+                                </span>
+                                <span>Age: {{ user_b.age }}</span>
+                            </div>
+                            
+                            {% if user_b.height %}
+                            <p class="mb-1">
+                                <strong>Height:</strong> {{ user_b.height }} cm
+                            </p>
+                            {% endif %}
+                            
+                            <p class="mb-1">
+                                <strong>Location:</strong> {{ user_b.current_location|default(user_b.city ~ ', ' ~ user_b.country) }}
+                            </p>
+                            
+                            {% if user_b.religious_level %}
+                            <p class="mb-1">
+                                <strong>Religious Level:</strong>
+                                <span class="religious-badge {{ user_b.religious_level }}">
+                                    {% if user_b.religious_level == 'secular' %}
+                                        Secular/Hiloni
+                                    {% elif user_b.religious_level == 'traditional' %}
+                                        Traditional/Masorti
+                                    {% elif user_b.religious_level == 'modern_orthodox' %}
+                                        Modern Orthodox/Dati
+                                    {% elif user_b.religious_level == 'yeshivish' %}
+                                        Yeshivish
+                                    {% elif user_b.religious_level == 'hassidic' %}
+                                        Hassidic/Hasidi
+                                    {% else %}
+                                        {{ user_b.religious_level|capitalize }}
+                                    {% endif %}
+                                </span>
+                            </p>
+                            {% endif %}
+                            
+                            {% if user_b.kosher_level %}
+                            <p class="mb-1">
+                                <strong>Kosher Level:</strong> {{ user_b.kosher_level|replace('_', ' ')|capitalize }}
+                            </p>
+                            {% endif %}
+                            
+                            {% if user_b.shabbat_observance %}
+                            <p class="mb-1">
+                                <strong>Shabbat Observance:</strong> {{ user_b.shabbat_observance|replace('_', ' ')|capitalize }}
+                            </p>
+                            {% endif %}
+                            
+                            {% if user_b.education %}
+                            <p class="mb-1">
+                                <strong>Education:</strong> {{ user_b.education|replace('_', ' ')|capitalize }}
+                            </p>
+                            {% endif %}
+                            
+                            {% if user_b.occupation %}
+                            <p class="mb-1">
+                                <strong>Occupation:</strong> {{ user_b.occupation }}
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            {% if compatibility.factors %}
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Compatibility Factors</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table compatibility-table">
+                            <thead>
+                                <tr>
+                                    <th>Factor</th>
+                                    <th>Score</th>
+                                    <th>Weight</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for factor in compatibility.factors %}
+                                    <tr>
+                                        <td>{{ factor.name|replace('_', ' ')|capitalize }}</td>
+                                        <td>
+                                            <div class="progress" style="height: 20px;">
+                                                <div class="progress-bar 
+                                                    {% if factor.score >= 75 %}bg-success
+                                                    {% elif factor.score >= 50 %}bg-warning
+                                                    {% else %}bg-danger{% endif %}" 
+                                                    role="progressbar" 
+                                                    style="width: {{ factor.score }}%;"
+                                                    aria-valuenow="{{ factor.score }}" 
+                                                    aria-valuemin="0" 
+                                                    aria-valuemax="100">
+                                                    {{ factor.score }}%
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>{{ factor.weight }}</td>
+                                        <td>{{ factor.notes|default('') }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Overall Compatibility</h5>
+                </div>
+                <div class="card-body">
+                    <p>The compatibility score is {{ compatibility.overall_score|default(compatibility.score|default(0)) }}%. 
+                       Detailed compatibility factors are not available for this match.</p>
+                </div>
+            </div>
+            {% endif %}
+            
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('matches.index') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Back to Matches
+                </a>
+                <button type="button" class="btn btn-primary">
+                    <i class="fas fa-star me-1"></i> Save this Match
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
