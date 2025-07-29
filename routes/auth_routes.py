@@ -15,13 +15,21 @@ def login():
     if form.validate_on_submit():
         try:
             # Make API request to backend for authentication
+            api_url = f"{current_app.config['API_URL']}/auth/login"
+            print(f"DEBUG: Making POST request to: {api_url}")
+            print(f"DEBUG: Request data: {{'email': '{form.email.data}', 'password': '[REDACTED]'}}")
+            
             response = requests.post(
-                f"{current_app.config['API_URL']}/auth/login",
+                api_url,
                 json={
                     'email': form.email.data,
                     'password': form.password.data
                 }
             )
+            
+            print(f"DEBUG: Response status: {response.status_code}")
+            print(f"DEBUG: Response headers: {dict(response.headers)}")
+            print(f"DEBUG: Response text: {response.text}")
             
             if response.status_code == 200:
                 data = response.json()
