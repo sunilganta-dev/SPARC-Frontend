@@ -12,7 +12,7 @@ load_dotenv()
 # Initialize Flask app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-secret-key')
-app.config['API_URL'] = os.getenv('API_URL', 'http://sparc.entrancegrp.com/api')
+app.config['API_URL'] = os.getenv('API_URL', 'https://sparc.chaya.dev/api')
 
 # Setup login manager
 login_manager = LoginManager()

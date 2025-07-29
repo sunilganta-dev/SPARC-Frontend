@@ -15,7 +15,7 @@ def login():
     if form.validate_on_submit():
         try:
             # Make API request to backend for authentication
-            api_url = f"{current_app.config['API_URL']}/auth/login/"  # Added trailing slash
+            api_url = f"{current_app.config['API_URL']}/auth/login"
             print(f"DEBUG: API_URL config: {current_app.config['API_URL']}")
             print(f"DEBUG: Making POST request to: {api_url}")
             print(f"DEBUG: Request data: {{'email': '{form.email.data}', 'password': '[REDACTED]'}}")
@@ -32,8 +32,7 @@ def login():
                     'email': form.email.data,
                     'password': form.password.data
                 },
-                headers=headers,
-                allow_redirects=False  # Don't follow redirects to see if that's the issue
+                headers=headers
             )
             
             print(f"DEBUG: Response status: {response.status_code}")
