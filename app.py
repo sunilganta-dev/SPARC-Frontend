@@ -12,7 +12,7 @@ load_dotenv()
 # Initialize Flask app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-secret-key')
-app.config['API_URL'] = os.getenv('API_URL', 'http://localhost:5000/api')
+app.config['API_URL'] = os.getenv('API_URL', 'http://sparc.entrancegrp.com/api')
 
 # Setup login manager
 login_manager = LoginManager()
@@ -74,4 +74,4 @@ def index():
     return render_template('index.html', stats=stats)
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5005) 
+    app.run(debug=True, host='0.0.0.0', port=5006) 
