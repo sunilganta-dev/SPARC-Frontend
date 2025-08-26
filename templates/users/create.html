@@ -1,0 +1,395 @@
+{% extends "base.html" %}
+
+{% block title %}Add New Applicant - SPARC Matchmaking{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">Add New Applicant</h1>
+    <a href="{{ url_for('users.index') }}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left me-1"></i> Back to Applicants
+    </a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form method="POST" class="needs-validation" novalidate>
+            {{ form.hidden_tag() }}
+            
+            <!-- Basic Information -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h4 class="mb-3"><i class="fas fa-user me-2"></i>Basic Information</h4>
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.first_name.label(class="form-label") }}
+                    {{ form.first_name(class="form-control" + (" is-invalid" if form.first_name.errors else "")) }}
+                    {% if form.first_name.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.first_name.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.last_name.label(class="form-label") }}
+                    {{ form.last_name(class="form-control" + (" is-invalid" if form.last_name.errors else "")) }}
+                    {% if form.last_name.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.last_name.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.email.label(class="form-label") }}
+                    {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else "")) }}
+                    {% if form.email.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.phone.label(class="form-label") }}
+                    {{ form.phone(class="form-control" + (" is-invalid" if form.phone.errors else "")) }}
+                    {% if form.phone.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.phone.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4 mb-3">
+                    {{ form.age.label(class="form-label") }}
+                    {{ form.age(class="form-control" + (" is-invalid" if form.age.errors else "")) }}
+                    {% if form.age.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.age.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4 mb-3">
+                    {{ form.gender.label(class="form-label") }}
+                    {{ form.gender(class="form-select" + (" is-invalid" if form.gender.errors else "")) }}
+                    {% if form.gender.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.gender.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4 mb-3">
+                    {{ form.height.label(class="form-label") }}
+                    {{ form.height(class="form-control" + (" is-invalid" if form.height.errors else "")) }}
+                    {% if form.height.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.height.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Location -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h4 class="mb-3"><i class="fas fa-map-marker-alt me-2"></i>Location</h4>
+                </div>
+                <div class="col-md-4 mb-3">
+                    {{ form.city.label(class="form-label") }}
+                    {{ form.city(class="form-control" + (" is-invalid" if form.city.errors else "")) }}
+                    {% if form.city.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.city.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4 mb-3">
+                    {{ form.state.label(class="form-label") }}
+                    {{ form.state(class="form-control" + (" is-invalid" if form.state.errors else "")) }}
+                    {% if form.state.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.state.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4 mb-3">
+                    {{ form.country.label(class="form-label") }}
+                    {{ form.country(class="form-control" + (" is-invalid" if form.country.errors else "")) }}
+                    {% if form.country.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.country.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Religious Background -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h4 class="mb-3"><i class="fas fa-pray me-2"></i>Religious Background</h4>
+                </div>
+                <div class="col-md-4 mb-3">
+                    {{ form.religious_level.label(class="form-label") }}
+                    {{ form.religious_level(class="form-select" + (" is-invalid" if form.religious_level.errors else "")) }}
+                    {% if form.religious_level.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.religious_level.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4 mb-3">
+                    {{ form.kosher_level.label(class="form-label") }}
+                    {{ form.kosher_level(class="form-select" + (" is-invalid" if form.kosher_level.errors else "")) }}
+                    {% if form.kosher_level.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.kosher_level.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4 mb-3">
+                    {{ form.shabbat_observance.label(class="form-label") }}
+                    {{ form.shabbat_observance(class="form-select" + (" is-invalid" if form.shabbat_observance.errors else "")) }}
+                    {% if form.shabbat_observance.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.shabbat_observance.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Cultural Background -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h4 class="mb-3"><i class="fas fa-globe me-2"></i>Cultural Background</h4>
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.background.label(class="form-label") }}
+                    {{ form.background(class="form-control" + (" is-invalid" if form.background.errors else ""), placeholder="e.g., Ashkenazi, Sephardi, etc.") }}
+                    {% if form.background.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.background.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.languages.label(class="form-label") }}
+                    {{ form.languages(class="form-control" + (" is-invalid" if form.languages.errors else ""), placeholder="e.g., Hebrew, English, Spanish") }}
+                    {% if form.languages.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.languages.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Education & Career -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h4 class="mb-3"><i class="fas fa-graduation-cap me-2"></i>Education & Career</h4>
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.education.label(class="form-label") }}
+                    {{ form.education(class="form-select" + (" is-invalid" if form.education.errors else "")) }}
+                    {% if form.education.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.education.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.occupation.label(class="form-label") }}
+                    {{ form.occupation(class="form-control" + (" is-invalid" if form.occupation.errors else "")) }}
+                    {% if form.occupation.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.occupation.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Family Plans -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h4 class="mb-3"><i class="fas fa-baby me-2"></i>Family Plans</h4>
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.wants_children.label(class="form-label") }}
+                    {{ form.wants_children(class="form-select" + (" is-invalid" if form.wants_children.errors else "")) }}
+                    {% if form.wants_children.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.wants_children.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h4 class="mb-3"><i class="fas fa-info-circle me-2"></i>Additional Information</h4>
+                </div>
+                <div class="col-12 mb-3">
+                    {{ form.hobbies.label(class="form-label") }}
+                    {{ form.hobbies(class="form-control" + (" is-invalid" if form.hobbies.errors else ""), rows="3", placeholder="Share your hobbies and interests...") }}
+                    {% if form.hobbies.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.hobbies.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-12 mb-3">
+                    {{ form.additional_info.label(class="form-label") }}
+                    {{ form.additional_info(class="form-control" + (" is-invalid" if form.additional_info.errors else ""), rows="4", placeholder="Any additional information you'd like to share...") }}
+                    {% if form.additional_info.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.additional_info.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Preferences for Match -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h4 class="mb-3"><i class="fas fa-heart me-2"></i>Preferences for Match</h4>
+                </div>
+                <div class="col-md-3 mb-3">
+                    {{ form.age_range_min.label(class="form-label") }}
+                    {{ form.age_range_min(class="form-control" + (" is-invalid" if form.age_range_min.errors else "")) }}
+                    {% if form.age_range_min.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.age_range_min.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-3 mb-3">
+                    {{ form.age_range_max.label(class="form-label") }}
+                    {{ form.age_range_max(class="form-control" + (" is-invalid" if form.age_range_max.errors else "")) }}
+                    {% if form.age_range_max.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.age_range_max.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-3 mb-3">
+                    {{ form.height_preference_min.label(class="form-label") }}
+                    {{ form.height_preference_min(class="form-control" + (" is-invalid" if form.height_preference_min.errors else "")) }}
+                    {% if form.height_preference_min.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.height_preference_min.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-3 mb-3">
+                    {{ form.height_preference_max.label(class="form-label") }}
+                    {{ form.height_preference_max(class="form-control" + (" is-invalid" if form.height_preference_max.errors else "")) }}
+                    {% if form.height_preference_max.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.height_preference_max.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.religious_preference.label(class="form-label") }}
+                    {{ form.religious_preference(class="form-select" + (" is-invalid" if form.religious_preference.errors else "")) }}
+                    {% if form.religious_preference.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.religious_preference.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.location_preference.label(class="form-label") }}
+                    {{ form.location_preference(class="form-control" + (" is-invalid" if form.location_preference.errors else "")) }}
+                    {% if form.location_preference.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.location_preference.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('users.index') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times me-1"></i> Cancel
+                        </a>
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Form validation
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        var forms = document.getElementsByClassName('needs-validation');
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
+</script>
+{% endblock %} 

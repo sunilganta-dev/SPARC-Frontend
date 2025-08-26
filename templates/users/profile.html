@@ -1,0 +1,1085 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - SPARC Matchmaking{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="profile-hero mb-4">
+    <div class="hero-background"></div>
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="hero-title">
+                    Welcome back, {{ profile.name|default(current_user.name) }}!
+                </h1>
+                <p class="hero-subtitle">Manage your matchmaking profile and track your success</p>
+            </div>
+            <div class="col-lg-4 text-center">
+                <div class="profile-picture-section">
+                    <div class="profile-picture-container">
+                        {% if profile.profile_picture %}
+                            <img src="{{ profile.profile_picture }}" alt="Profile Picture" class="profile-picture" id="profilePicture">
+                        {% else %}
+                            <div class="profile-picture-placeholder" id="profilePicture">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                        {% endif %}
+                        <div class="profile-picture-overlay">
+                            <label for="profilePictureInput" class="upload-btn">
+                                <i class="fas fa-camera"></i>
+                            </label>
+                        </div>
+                    </div>
+                    <input type="file" id="profilePictureInput" accept="image/*" style="display: none;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="container mb-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="quick-actions-card">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h5 class="mb-2"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+                        <p class="text-muted mb-0">Manage your matchmaking activities efficiently</p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                                <i class="fas fa-edit me-1"></i> Edit Profile
+                            </button>
+                            <a href="{{ url_for('users.create') }}" class="btn btn-success">
+                                <i class="fas fa-user-plus me-1"></i> Add Applicant
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        <!-- Profile Overview -->
+        <div class="col-lg-4 mb-4">
+            <div class="profile-card floating">
+                <div class="profile-header">
+                    <div class="profile-avatar-container">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="online-indicator"></div>
+                    </div>
+                    <h4 class="profile-name">{{ profile.name|default(current_user.name) }}</h4>
+                    <p class="profile-title">Professional Matchmaker</p>
+                    <div class="profile-badges">
+                        <span class="badge bg-primary">Verified</span>
+                        <span class="badge bg-success">Active</span>
+                    </div>
+                </div>
+                
+                <div class="profile-info">
+                    <div class="info-item">
+                        <i class="fas fa-envelope text-primary"></i>
+                        <span>{{ profile.email|default(current_user.email) }}</span>
+                    </div>
+                    {% if profile.organization %}
+                    <div class="info-item">
+                        <i class="fas fa-building text-primary"></i>
+                        <span>{{ profile.organization }}</span>
+                    </div>
+                    {% endif %}
+                    {% if profile.location %}
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt text-primary"></i>
+                        <span>{{ profile.location }}</span>
+                    </div>
+                    {% endif %}
+                    {% if profile.experience_years %}
+                    <div class="info-item">
+                        <i class="fas fa-clock text-primary"></i>
+                        <span>{{ profile.experience_years }} years experience</span>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Social Media Links -->
+                {% if profile.social_media %}
+                <div class="social-links-section">
+                    <h6 class="section-title">Connect</h6>
+                    <div class="social-links">
+                        {% if profile.social_media.linkedin %}
+                        <a href="{{ profile.social_media.linkedin }}" class="social-link linkedin" target="_blank">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        {% endif %}
+                        {% if profile.social_media.facebook %}
+                        <a href="{{ profile.social_media.facebook }}" class="social-link facebook" target="_blank">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        {% endif %}
+                        {% if profile.social_media.instagram %}
+                        <a href="{{ profile.social_media.instagram }}" class="social-link instagram" target="_blank">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Statistics Dashboard -->
+        <div class="col-lg-8">
+            <div class="row">
+                <!-- Key Metrics -->
+                <div class="col-md-6 mb-3">
+                    <div class="metric-card primary">
+                        <div class="metric-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-number">{{ stats.applicants|default(25) }}</div>
+                            <div class="metric-label">Total Applicants</div>
+                            <div class="metric-trend positive">
+                                <i class="fas fa-arrow-up"></i> +12% this month
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <div class="metric-card success">
+                        <div class="metric-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-number">{{ stats.matches|default(12) }}</div>
+                            <div class="metric-label">Successful Matches</div>
+                            <div class="metric-trend positive">
+                                <i class="fas fa-arrow-up"></i> +8% this month
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <div class="metric-card info">
+                        <div class="metric-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-number">{{ stats.avg_compatibility|default(78) }}%</div>
+                            <div class="metric-label">Avg Compatibility</div>
+                            <div class="metric-trend positive">
+                                <i class="fas fa-arrow-up"></i> +5% this month
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <div class="metric-card warning">
+                        <div class="metric-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-number">{{ stats.pending_matches|default(2) }}</div>
+                            <div class="metric-label">Pending Matches</div>
+                            <div class="metric-trend neutral">
+                                <i class="fas fa-minus"></i> No change
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Performance Chart -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="performance-card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-chart-area me-2"></i>Performance Overview</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="performance-metrics">
+                                <div class="row">
+                                    <div class="col-md-3 text-center">
+                                        <div class="performance-item">
+                                            <div class="performance-circle success">
+                                                <span>{{ stats.success_rate|default(85) }}%</span>
+                                            </div>
+                                            <p class="performance-label">Success Rate</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 text-center">
+                                        <div class="performance-item">
+                                            <div class="performance-circle primary">
+                                                <span>{{ stats.monthly_matches|default(3) }}</span>
+                                            </div>
+                                            <p class="performance-label">This Month</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 text-center">
+                                        <div class="performance-item">
+                                            <div class="performance-circle info">
+                                                <span>{{ stats.active_applicants|default(8) }}</span>
+                                            </div>
+                                            <p class="performance-label">Active Applicants</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 text-center">
+                                        <div class="performance-item">
+                                            <div class="performance-circle warning">
+                                                <span>{{ stats.experience_years|default(5) }}y</span>
+                                            </div>
+                                            <p class="performance-label">Experience</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Enhanced About Me & Recent Activity -->
+    <div class="row mt-4">
+        
+        <!-- Enhanced About Me -->
+        <div class="col-lg-12">
+            <div class="about-card enhanced">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-user-circle me-2"></i>About Me</h5>
+                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Bio Section -->
+                    <div class="bio-section">
+                        {% if profile.bio %}
+                            <div class="bio-content">
+                                <div class="bio-header">
+                                    <i class="fas fa-quote-left bio-quote"></i>
+                                </div>
+                                <p class="bio-text enhanced">{{ profile.bio }}</p>
+                                <div class="bio-footer">
+                                    <i class="fas fa-quote-right bio-quote"></i>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="bio-placeholder">
+                                <div class="placeholder-icon">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                                <h6 class="placeholder-title">Add Your Bio</h6>
+                                <p class="placeholder-text">Tell others about your matchmaking experience and approach</p>
+                                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                                    <i class="fas fa-plus me-1"></i>Add Bio
+                                </button>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfileModalLabel">
+                    <i class="fas fa-edit me-2"></i>Edit Profile
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{{ url_for('users.profile') }}">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="name" name="name" 
+                                   value="{{ profile.name|default(current_user.name) }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" 
+                                   value="{{ profile.email|default(current_user.email) }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="organization" class="form-label">Organization</label>
+                            <input type="text" class="form-control" id="organization" name="organization" 
+                                   value="{{ profile.organization|default('') }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" 
+                                   value="{{ profile.phone|default('') }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="location" class="form-label">Location</label>
+                            <input type="text" class="form-control" id="location" name="location" 
+                                   value="{{ profile.location|default('') }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="experience_years" class="form-label">Years of Experience</label>
+                            <input type="number" class="form-control" id="experience_years" name="experience_years" 
+                                   value="{{ profile.experience_years|default(0) }}" min="0" max="50">
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="bio" class="form-label">Bio</label>
+                            <textarea class="form-control" id="bio" name="bio" rows="4" 
+                                      placeholder="Tell us about your matchmaking experience and approach...">{{ profile.bio|default('') }}</textarea>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="form-label">Specializations</label>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="specializations" value="religious" 
+                                               id="spec_religious" {% if 'religious' in profile.specializations %}checked{% endif %}>
+                                        <label class="form-check-label" for="spec_religious">Religious Matching</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="specializations" value="cultural" 
+                                               id="spec_cultural" {% if 'cultural' in profile.specializations %}checked{% endif %}>
+                                        <label class="form-check-label" for="spec_cultural">Cultural Matching</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="specializations" value="professional" 
+                                               id="spec_professional" {% if 'professional' in profile.specializations %}checked{% endif %}>
+                                        <label class="form-check-label" for="spec_professional">Professional Matching</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="website" class="form-label">Website</label>
+                            <input type="url" class="form-control" id="website" name="website" 
+                                   value="{{ profile.website|default('') }}" placeholder="https://yourwebsite.com">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="linkedin" class="form-label">LinkedIn</label>
+                            <input type="url" class="form-control" id="linkedin" name="linkedin" 
+                                   value="{{ profile.social_media.linkedin|default('') }}" placeholder="https://linkedin.com/in/...">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="facebook" class="form-label">Facebook</label>
+                            <input type="url" class="form-control" id="facebook" name="facebook" 
+                                   value="{{ profile.social_media.facebook|default('') }}" placeholder="https://facebook.com/...">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="instagram" class="form-label">Instagram</label>
+                            <input type="url" class="form-control" id="instagram" name="instagram" 
+                                   value="{{ profile.social_media.instagram|default('') }}" placeholder="https://instagram.com/...">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i>Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Hero Section */
+.profile-hero {
+    position: relative;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--purple-primary) 100%);
+    color: white;
+    padding: 3rem 0;
+    border-radius: 0 0 30px 30px;
+    overflow: hidden;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="hearts" patternUnits="userSpaceOnUse" width="20" height="20"><path d="M10 6.5c-1.5-1.5-3.5-2-5.5-1.5s-3 2-3 4c0 2 1.5 3.5 3.5 4.5s4 2 4 2 2-1 4-2 3.5-2.5 3.5-4.5c0-2-1.5-3-3-4s-4-0.5-5.5 1.5z" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23hearts)"/></svg>');
+    opacity: 0.3;
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* Profile Picture Section */
+.profile-picture-section {
+    text-align: center;
+}
+
+.profile-picture-container {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.profile-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.profile-picture-placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), var(--purple-primary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 3rem;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.profile-picture-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+}
+
+.profile-picture-container:hover .profile-picture-overlay {
+    opacity: 1;
+}
+
+.upload-btn {
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+/* Quick Actions */
+.quick-actions-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px var(--shadow-medium);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Profile Card */
+.profile-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px var(--shadow-medium);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+}
+
+.profile-header {
+    margin-bottom: 2rem;
+}
+
+.profile-avatar-container {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), var(--purple-primary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    color: white;
+    font-size: 3rem;
+    box-shadow: 0 8px 25px rgba(111, 66, 193, 0.3);
+}
+
+.online-indicator {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    background: var(--success-color);
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.profile-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--dark-text);
+}
+
+.profile-title {
+    color: var(--muted-text);
+    margin-bottom: 1rem;
+}
+
+.profile-badges {
+    margin-bottom: 1.5rem;
+}
+
+.profile-badges .badge {
+    margin: 0 0.25rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+}
+
+.profile-info {
+    margin-bottom: 2rem;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: rgba(111, 66, 193, 0.05);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.info-item:hover {
+    background: rgba(111, 66, 193, 0.1);
+    transform: translateX(5px);
+}
+
+.info-item i {
+    margin-right: 0.75rem;
+    font-size: 1.1rem;
+    width: 20px;
+}
+
+/* Social Links */
+.social-links-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--dark-text);
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.social-link {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.social-link:hover {
+    transform: translateY(-3px);
+    color: white;
+    text-decoration: none;
+}
+
+.social-link.linkedin {
+    background: linear-gradient(135deg, #0077b5, #005885);
+}
+
+.social-link.facebook {
+    background: linear-gradient(135deg, #1877f2, #0d6efd);
+}
+
+.social-link.instagram {
+    background: linear-gradient(135deg, #e4405f, #c13584);
+}
+
+.social-link.github {
+    background: linear-gradient(135deg, #333, #24292e);
+}
+
+.social-link.github:hover {
+    background: linear-gradient(135deg, #24292e, #333);
+    transform: translateY(-3px);
+}
+
+/* GitHub Integration Buttons */
+.btn-outline-dark.github-connect {
+    border-color: #333;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-dark.github-connect:hover {
+    background-color: #333;
+    border-color: #333;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.btn-outline-danger.github-disconnect {
+    border-color: #dc3545;
+    color: #dc3545;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-danger.github-disconnect:hover {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Metric Cards */
+.metric-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px var(--shadow-medium);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--purple-primary), var(--teal-primary), var(--orange-primary));
+}
+
+.metric-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px var(--shadow-medium);
+}
+
+.metric-card.primary {
+    border-left: 4px solid var(--primary-color);
+}
+
+.metric-card.success {
+    border-left: 4px solid var(--success-color);
+}
+
+.metric-card.info {
+    border-left: 4px solid var(--info-color);
+}
+
+.metric-card.warning {
+    border-left: 4px solid var(--warning-color);
+}
+
+.metric-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.metric-card.primary .metric-icon {
+    background: linear-gradient(135deg, var(--primary-color), var(--purple-primary));
+}
+
+.metric-card.success .metric-icon {
+    background: linear-gradient(135deg, var(--success-color), var(--emerald-primary));
+}
+
+.metric-card.info .metric-icon {
+    background: linear-gradient(135deg, var(--info-color), var(--teal-primary));
+}
+
+.metric-card.warning .metric-icon {
+    background: linear-gradient(135deg, var(--warning-color), var(--orange-primary));
+}
+
+.metric-content {
+    flex: 1;
+}
+
+.metric-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-bottom: 0.25rem;
+}
+
+.metric-label {
+    font-size: 0.9rem;
+    color: var(--muted-text);
+    margin-bottom: 0.5rem;
+}
+
+.metric-trend {
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.metric-trend.positive {
+    color: var(--success-color);
+}
+
+.metric-trend.neutral {
+    color: var(--muted-text);
+}
+
+/* Performance Card */
+.performance-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px var(--shadow-medium);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+}
+
+.performance-metrics {
+    padding: 1rem 0;
+}
+
+.performance-item {
+    text-align: center;
+    padding: 1rem;
+}
+
+.performance-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    color: white;
+    font-weight: 700;
+    font-size: 1.2rem;
+    position: relative;
+}
+
+.performance-circle.success {
+    background: linear-gradient(135deg, var(--success-color), var(--emerald-primary));
+}
+
+.performance-circle.primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--purple-primary));
+}
+
+.performance-circle.info {
+    background: linear-gradient(135deg, var(--info-color), var(--teal-primary));
+}
+
+.performance-circle.warning {
+    background: linear-gradient(135deg, var(--warning-color), var(--orange-primary));
+}
+
+.performance-label {
+    font-size: 0.9rem;
+    color: var(--muted-text);
+    font-weight: 600;
+}
+
+/* About Card */
+.about-card.enhanced {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px var(--shadow-medium);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    padding: 15px;
+}
+
+/* Bio Section */
+.bio-section {
+    margin-bottom: 2rem;
+}
+
+.bio-content {
+    position: relative;
+    background: linear-gradient(135deg, rgba(111, 66, 193, 0.05), rgba(32, 201, 151, 0.05));
+    padding: 1.5rem;
+    border-radius: 12px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.bio-quote {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    opacity: 0.6;
+}
+
+.bio-header {
+    margin-bottom: 1rem;
+}
+
+.bio-footer {
+    margin-top: 1rem;
+    text-align: right;
+}
+
+.bio-text.enhanced {
+    line-height: 1.7;
+    color: var(--dark-text);
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* Bio Placeholder */
+.bio-placeholder {
+    text-align: center;
+    padding: 2rem 1rem;
+    background: rgba(111, 66, 193, 0.03);
+    border-radius: 12px;
+    border: 2px dashed rgba(111, 66, 193, 0.2);
+}
+
+.placeholder-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), var(--purple-primary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.placeholder-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--dark-text);
+}
+
+.placeholder-text {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    color: var(--muted-text);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 2.5rem;
+    }
+    
+    .metric-card {
+        margin-bottom: 1rem;
+    }
+    
+    .quick-actions-card .btn-group {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .quick-actions-card .btn-group .btn {
+        width: 100%;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Profile Picture Upload Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const profilePictureInput = document.getElementById('profilePictureInput');
+    const profilePicture = document.getElementById('profilePicture');
+    const profilePicturePlaceholder = document.querySelector('.profile-picture-placeholder');
+    
+    if (profilePictureInput) {
+        profilePictureInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select an image file.');
+                    return;
+                }
+                
+                // Validate file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Image size should be less than 5MB.');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Create new image element
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = 'Profile Picture';
+                    img.className = 'profile-picture';
+                    img.id = 'profilePicture';
+                    
+                    // Replace placeholder with image
+                    if (profilePicturePlaceholder) {
+                        profilePicturePlaceholder.parentNode.replaceChild(img, profilePicturePlaceholder);
+                    } else if (profilePicture && profilePicture.tagName === 'IMG') {
+                        profilePicture.src = e.target.result;
+                    }
+                    
+                    // Upload to server
+                    uploadProfilePicture(file);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+    
+    // Function to upload profile picture to server
+    function uploadProfilePicture(file) {
+        const formData = new FormData();
+        formData.append('profile_picture', file);
+        
+        fetch('/users/profile/upload-picture', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Show success message
+                showNotification('Profile picture updated successfully!', 'success');
+            } else {
+                showNotification('Failed to upload profile picture. Please try again.', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error uploading profile picture:', error);
+            showNotification('Error uploading profile picture. Please try again.', 'error');
+        });
+    }
+    
+    // Function to show notifications
+    function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show position-fixed`;
+        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        notification.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 5000);
+    }
+    
+    // Modal functionality fix
+    const editProfileButtons = document.querySelectorAll('[data-bs-target="#editProfileModal"]');
+    const editProfileModal = document.getElementById('editProfileModal');
+    
+    if (editProfileButtons.length > 0 && editProfileModal) {
+        editProfileButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const modal = new bootstrap.Modal(editProfileModal);
+                modal.show();
+            });
+        });
+    }
+    
+    // Close modal functionality
+    const closeButtons = document.querySelectorAll('[data-bs-dismiss="modal"]');
+    closeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const modal = bootstrap.Modal.getInstance(editProfileModal);
+            if (modal) {
+                modal.hide();
+            }
+        });
+    });
+});
+</script>
+{% endblock %} 
