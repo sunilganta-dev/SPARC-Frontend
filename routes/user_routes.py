@@ -64,11 +64,17 @@ def profile():
         # Try to fetch from API if available
         try:
             headers = {'Authorization': f'Bearer {current_user.token}'}
+            api_url = f"{current_app.config['API_URL']}/matchmaker/profile"
+            print(f"DEBUG: Attempting to fetch profile from: {api_url}")
+            
             response = requests.get(
-                f"{current_app.config['API_URL']}/matchmaker/profile",
+                api_url,
                 headers=headers,
                 timeout=5
             )
+            
+            print(f"DEBUG: Profile API response status: {response.status_code}")
+            print(f"DEBUG: Profile API response text: {response.text[:500]}")
             
             if response.status_code == 200:
                 api_profile = response.json()
