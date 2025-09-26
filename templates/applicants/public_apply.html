@@ -10,18 +10,21 @@
         <i class="fas fa-user-plus me-2"></i> Public Application
       </h3>
 
-      <form method="POST" enctype="multipart/form-data">
+      <!-- Form -->
+      <form id="public-apply-form" method="POST" enctype="multipart/form-data">
         <!-- Matchmaker dropdown -->
         <div class="mb-3">
-          <label for="matchmaker_id" class="form-label">Select Matchmaker</label>
-          <select name="matchmaker_id" id="matchmaker_id" class="form-select" required>
-            <option value="">-- Choose Matchmaker --</option>
-            {% for m in matchmakers %}
-              <option value="{{ m.id }}"
-                {% if selected_matchmaker_id and selected_matchmaker_id == m.id %}selected{% endif %}>
-                {{ m.first_name }} {{ m.last_name }}
+          <label for="matchmaker" class="form-label">Select Matchmaker</label>
+          <select class="form-select" id="matchmaker" name="matchmaker_id" required>
+              <!-- Default option -->
+              <option value="0" {% if selected_matchmaker == 0 %}selected{% endif %}>
+                  General Submission
               </option>
-            {% endfor %}
+              {% for m in matchmakers %}
+                  <option value="{{ m.id }}" {% if selected_matchmaker == m.id %}selected{% endif %}>
+                      {{ m.name }}
+                  </option>
+              {% endfor %}
           </select>
         </div>
 
@@ -111,4 +114,12 @@
     </div>
   </div>
 </div>
+
+<!-- Script to redirect form to correct backend endpoint -->
+<script>
+  document.getElementById("public-apply-form").addEventListener("submit", function(e) {
+    const matchmakerId = document.getElementById("matchmaker").value;
+    this.action = `/apply/${matchmakerId}`;  // ✅ Dynamically set action before submitting
+  });
+</script>
 {% endblock %}
