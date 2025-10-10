@@ -47,17 +47,17 @@ def profile():
         profile_data = {
             'name': current_user.name,
             'email': current_user.email,
-            'organization': 'SPARC Matchmaking',
+            'organization': 'The Qlick Matchmaking',
             'phone': '+1 (555) 123-4567',
             'location': 'New York, NY',
             'experience_years': 5,
             'specializations': ['religious', 'cultural'],
             'bio': 'Experienced matchmaker specializing in religious and cultural compatibility.',
-            'website': 'https://sparc-matchmaking.com',
+            'website': 'https://theqlick-matchmaking.com',
             'social_media': {
                 'linkedin': 'https://linkedin.com/in/matchmaker',
-                'facebook': 'https://facebook.com/sparcmatchmaking',
-                'instagram': 'https://instagram.com/sparcmatchmaking'
+                'facebook': 'https://facebook.com/theqlickmatchmaking',
+                'instagram': 'https://instagram.com/theqlickmatchmaking'
             }
         }
         

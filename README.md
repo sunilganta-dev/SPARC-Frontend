@@ -1,10 +1,10 @@
-# SPARC-Frontend
+# The Qlick-Frontend
 
-Frontend for the SPARC (Shidduch Programming and Relationship Compatibility) matchmaking platform.
+Frontend for the The Qlick (Shidduch Programming and Relationship Compatibility) matchmaking platform.
 
 ## Overview
 
-SPARC-Frontend is a mobile-friendly web interface that connects to the SPARC backend API. It allows Jewish matchmakers to:
+The Qlick-Frontend is a mobile-friendly web interface that connects to the The Qlick backend API. It allows Jewish matchmakers to:
 
 - Manage their applicant profiles
 - View potential matches from a larger pool of applicants
@@ -32,8 +32,8 @@ SPARC-Frontend is a mobile-friendly web interface that connects to the SPARC bac
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/SPARC-Frontend.git
-cd SPARC-Frontend
+git clone https://github.com/yourusername/The Qlick-Frontend.git
+cd The Qlick-Frontend
 ```
 
 2. Create a virtual environment and activate it:
@@ -50,7 +50,7 @@ pip install -r requirements.txt
 4. Create a `.env` file in the root directory with the following configuration:
 ```
 SECRET_KEY=your_secret_key_here
-API_URL=http://localhost:5000/api  # URL to your SPARC backend API
+API_URL=http://localhost:5000/api  # URL to your The Qlick backend API
 ```
 
 ## Running the Application
@@ -63,7 +63,7 @@ The frontend will be available at http://localhost:5001
 
 ## Backend Connection
 
-This frontend is designed to connect to the SPARC Backend API. Make sure the backend server is running and accessible at the URL specified in your `.env` file.
+This frontend is designed to connect to the The Qlick Backend API. Make sure the backend server is running and accessible at the URL specified in your `.env` file.
 
 ## Mobile Optimization
 
